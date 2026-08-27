@@ -1,1 +1,35 @@
-<p>login works!</p>
+<div class="auth-page">
+  <form class="auth-card" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h1>Welcome back</h1>
+    <p class="subtitle">Log in to your account</p>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <span class="error">
+          @if (form.get('email')?.errors?.['required']) { Email is required. }
+          @if (form.get('email')?.errors?.['email']) { Enter a valid email address. }
+        </span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="Your password" />
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <span class="error">Password is required.</span>
+      }
+    </div>
+
+    @if (errorMessage) {
+      <div class="form-error">{{ errorMessage }}</div>
+    }
+
+    <button type="submit">Log In</button>
+
+    <p class="switch-link">
+      Don't have an account? <a routerLink="/signup">Sign up</a>
+    </p>
+  </form>
+</div>
