@@ -1,1 +1,49 @@
-<p>signup works!</p>
+<div class="auth-page">
+  <form class="auth-card" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h1>Create an account</h1>
+    <p class="subtitle">Sign up to start browsing books</p>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="you@example.com" />
+      @if (form.get('email')?.invalid && form.get('email')?.touched) {
+        <span class="error">
+          @if (form.get('email')?.errors?.['required']) { Email is required. }
+          @if (form.get('email')?.errors?.['email']) { Enter a valid email address. }
+        </span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" placeholder="At least 8 characters" />
+      @if (form.get('password')?.invalid && form.get('password')?.touched) {
+        <span class="error">
+          @if (form.get('password')?.errors?.['required']) { Password is required. }
+          @if (form.get('password')?.errors?.['minlength']) { Password must be at least 8 characters. }
+        </span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="confirmPassword">Confirm Password</label>
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Re-enter password" />
+      @if (form.get('confirmPassword')?.touched && form.errors?.['passwordsMismatch']) {
+        <span class="error">Passwords do not match.</span>
+      }
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone Number</label>
+      <input id="phone" type="tel" formControlName="phone" placeholder="+201234567890" />
+      @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+        <span class="error">
+          @if (form.get('phone')?.errors?.['required']) { Phone number is required. }
+          @if (form.get('phone')?.errors?.['pattern']) { Enter a valid phone number. }
+        </span>
+      }
+    </div>
+
+    <button type="submit">Sign Up</button>
+  </form>
+</div>
