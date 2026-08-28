@@ -1,1 +1,10 @@
-<p>navbar works!</p>
+<nav class="navbar">
+  <span class="logo">Bookstore</span>
+  <div class="navbar-right">
+    <span class="welcome-text">Welcome, {{ username }}</span>
+    <button class="theme-toggle" (click)="theme.toggle()">
+      {{ theme.mode() === 'light' ? '🌙' : '☀️' }}
+    </button>
+    <button class="logout-btn" (click)="onLogoutClick()">Logout</button>
+  </div>
+</nav>

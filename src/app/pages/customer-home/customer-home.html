@@ -1,1 +1,18 @@
-<p>customer-home works!</p>
+<app-navbar [username]="username" (logout)="onLogout()" />
+
+<div class="hero">
+  <h1>Find your next great read</h1>
+  <p>Browse our collection of books across every genre</p>
+</div>
+
+<div class="book-grid">
+  @for (book of books; track book.id) {
+    <app-book-card
+      [id]="book.id"
+      [title]="book.title"
+      [price]="book.price"
+      [imageUrl]="book.imageUrl"
+      (viewDetails)="onViewDetails($event)"
+    />
+  }
+</div>
