@@ -1,6 +1,6 @@
 <div class="book-card">
   <img class="book-cover" [src]="imageUrl" [alt]="title" />
   <h3 class="book-title">{{ title }}</h3>
-  <p class="book-price">${{ price }}</p>
+  <p class="book-price">{{ price.toFixed(2) }} EGP</p>
   <button class="view-details-btn" (click)="onViewDetailsClick()">View Details</button>
 </div>

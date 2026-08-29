@@ -6,7 +6,7 @@
 </div>
 
 <div class="book-grid">
-  @for (book of books; track book.id) {
+  @for (book of books(); track book.id) {
     <app-book-card
       [id]="book.id"
       [title]="book.title"

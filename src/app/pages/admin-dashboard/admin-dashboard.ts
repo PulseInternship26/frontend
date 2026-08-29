@@ -29,7 +29,7 @@ export class AdminDashboard implements OnInit {
       author: ['', Validators.required],
       category: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
-      description: [''],
+      description: ['', Validators.required],
       imageUrl: ['https://placehold.co/200x260'],
     });
   }
@@ -53,16 +53,21 @@ export class AdminDashboard implements OnInit {
   }
 
   openEditForm(book: Book): void {
-    this.editingId = book.id;
-    this.form.setValue({
-      title: book.title,
-      author: book.author,
-      category: book.category,
-      price: book.price,
-      description: book.description || '',
-      imageUrl: book.imageUrl,
+    this.booksService.getBook(book.id).subscribe({
+      next: (fullBook) => {
+        this.editingId = fullBook.id;
+        this.form.setValue({
+          title: fullBook.title,
+          author: fullBook.author,
+          category: fullBook.category,
+          price: fullBook.price,
+          description: fullBook.description || '',
+          imageUrl: fullBook.imageUrl,
+        });
+        this.showForm = true;
+      },
+      error: (err) => console.error('Failed to load book details:', err),
     });
-    this.showForm = true;
   }
 
   cancelForm(): void {

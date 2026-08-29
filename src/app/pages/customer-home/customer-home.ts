@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { BookCard } from '../../shared/book-card/book-card';
@@ -12,7 +12,7 @@ import { Auth } from '../../core/auth';
   styleUrl: './customer-home.css',
 })
 export class CustomerHome implements OnInit {
-  books: Book[] = [];
+  books = signal<Book[]>([]);
   username: string = '';
 
   constructor(
@@ -25,11 +25,7 @@ export class CustomerHome implements OnInit {
     this.username = localStorage.getItem('email') || 'User';
 
     this.booksService.getBooks().subscribe({
-      next: (data) => {
-    console.log('Books received:', data);
-    this.books = data;
-    console.log('this.books is now:', this.books);
-      },
+      next: (data) => this.books.set(data),
       error: (err) => {
         console.error('Failed to load books:', err);
       },
