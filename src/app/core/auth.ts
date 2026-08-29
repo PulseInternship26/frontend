@@ -72,4 +72,7 @@ export class Auth {
   getRole(): string | null {
     return localStorage.getItem('role');
   }
+    getEmail(): string | null {
+    return localStorage.getItem('email');
+  }
 }

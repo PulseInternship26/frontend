@@ -1,1 +1,52 @@
-<p>manage-admins works!</p>
+<app-navbar [username]="username" (logout)="onLogout()" />
+
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <h1>Manage Admins</h1>
+      <p class="subtitle">Grant or revoke admin access</p>
+    </div>
+    <button class="secondary-btn" (click)="goToBooks()">Back to Books</button>
+  </div>
+
+  <div class="form-panel">
+    <h2>Add New Admin</h2>
+    <form [formGroup]="form" (ngSubmit)="onAddAdmin()" class="inline-form">
+      <div class="field">
+        <label>Email</label>
+        <input formControlName="email" placeholder="newadmin@example.com" />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <span class="error">Enter a valid email address.</span>
+        }
+      </div>
+      <button type="submit" class="primary-btn">Add Admin</button>
+    </form>
+    @if (errorMessage) {
+      <div class="form-error">{{ errorMessage }}</div>
+    }
+  </div>
+
+  <div class="table-wrapper">
+    <table class="book-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (admin of admins; track admin.id) {
+          <tr>
+            <td>{{ admin.email }}</td>
+            <td class="actions-cell">
+              <button class="icon-btn danger" (click)="removeAdmin(admin)">Remove</button>
+            </td>
+          </tr>
+        }
+        @empty {
+          <tr><td colspan="2" class="empty-row">No admins yet.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
