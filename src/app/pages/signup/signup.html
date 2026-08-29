@@ -43,6 +43,10 @@
         </span>
       }
     </div>
+    
+     @if (errorMessage) {
+      <div class="form-error">{{ errorMessage }}</div>
+    }
 
     <button type="submit">Sign Up</button>
   </form>

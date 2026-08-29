@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Auth } from '../../core/auth';
 import {
   ReactiveFormsModule,
@@ -23,8 +24,14 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 })
 export class Signup {
   form: FormGroup;
+  errorMessage = '';
 
-constructor(private fb: FormBuilder, private authService: Auth) {    this.form = this.fb.group(
+  constructor(
+    private fb: FormBuilder,
+    private authService: Auth,
+    private router: Router
+  ) {
+    this.form = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(8)]],
@@ -34,22 +41,24 @@ constructor(private fb: FormBuilder, private authService: Auth) {    this.form =
       { validators: passwordsMatchValidator }
     );
   }
+
   onSubmit(): void {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
+    this.errorMessage = '';
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const { email, password, confirmPassword, phone } = this.form.value;
+
+    this.authService.register({ email, password, confirmPassword, phone }).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.errorMessage = 'Registration failed. Please try again.';
+      },
+    });
   }
-
-  const { email, password, confirmPassword, phone } = this.form.value;
-
-  this.authService.register({ email, password, confirmPassword, phone }).subscribe({
-    next: (user) => {
-      console.log('Registered:', user);
-      // We'll add navigation to the login page here soon
-    },
-    error: (err) => {
-      console.error('Registration failed:', err);
-    },
-  });
-}
 }
