@@ -42,7 +42,6 @@ export class CustomerHome implements OnInit {
   }
 
   onViewDetails(bookId: number): void {
-    console.log('View details for book:', bookId);
-    // We'll wire this to Person 2's Book Details page later
+    this.router.navigate(['/books', bookId]);
   }
 }
