@@ -2,8 +2,13 @@ import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class Theme {
+  private readonly storage =
+    typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function'
+      ? localStorage
+      : null;
+
   mode = signal<'light' | 'dark'>(
-    (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
+    (this.storage?.getItem('theme') as 'light' | 'dark' | null) || 'light'
   );
 
   constructor() {
@@ -13,7 +18,7 @@ export class Theme {
   toggle(): void {
     const next = this.mode() === 'light' ? 'dark' : 'light';
     this.mode.set(next);
-    localStorage.setItem('theme', next);
+    this.storage?.setItem('theme', next);
     this.apply(next);
   }
 

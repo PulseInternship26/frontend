@@ -25,11 +25,18 @@ export interface LoginResponse {
   token: string;
   email: string;
   role: 'USER' | 'ADMIN';
+  expiresIn: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
   constructor(private http: HttpClient) {}
+
+  private get storage(): Storage | null {
+    return typeof localStorage !== 'undefined' && typeof localStorage.getItem === 'function'
+      ? localStorage
+      : null;
+  }
 
   register(payload: SignUpPayload): Observable<UserResponse> {
     return this.http.post<UserResponse>('/api/auth/register', payload);
@@ -40,15 +47,30 @@ export class Auth {
   }
 
   saveSession(auth: LoginResponse): void {
-    localStorage.setItem('token', auth.token);
-    localStorage.setItem('role', auth.role);
-    localStorage.setItem('email', auth.email);
+    this.storage?.setItem('token', auth.token);
+    this.storage?.setItem('role', auth.role);
+    this.storage?.setItem('email', auth.email);
   }
 
   getRole(): string | null {
-    return localStorage.getItem('role');
+    return this.storage?.getItem('role') ?? null;
   }
-    getEmail(): string | null {
-    return localStorage.getItem('email');
+
+  getEmail(): string | null {
+    return this.storage?.getItem('email') ?? null;
+  }
+
+  getToken(): string | null {
+    return this.storage?.getItem('token') ?? null;
+  }
+
+  isAuthenticated(): boolean {
+    return this.getToken() !== null;
+  }
+
+  clearSession(): void {
+    this.storage?.removeItem('token');
+    this.storage?.removeItem('role');
+    this.storage?.removeItem('email');
   }
 }

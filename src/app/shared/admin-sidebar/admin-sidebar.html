@@ -1,0 +1,19 @@
+<aside class="sidebar">
+  <header>
+    <a class="brand" routerLink="/admin/books">BOOK STORE</a>
+    <p>Admin Console</p>
+  </header>
+
+  <nav aria-label="Admin navigation">
+    <a routerLink="/admin/books" routerLinkActive="active">Manage Books</a>
+    <a routerLink="/admin/admins" routerLinkActive="active">Manage Admins</a>
+  </nav>
+
+  <footer>
+    <span class="username" [title]="username">{{ username }}</span>
+    <button type="button" class="theme-button" (click)="theme.toggle()">
+      {{ theme.mode() === 'light' ? 'Dark mode' : 'Light mode' }}
+    </button>
+    <button type="button" class="logout-button" (click)="onLogout()">Logout</button>
+  </footer>
+</aside>

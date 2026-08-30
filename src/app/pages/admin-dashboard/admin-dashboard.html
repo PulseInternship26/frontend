@@ -1,61 +1,84 @@
-<app-navbar [username]="username" (logout)="onLogout()" />
-
-<div class="dashboard">
+<div class="admin-layout">
+  <app-admin-sidebar [username]="username" (logout)="onLogout()" />
+  <main class="admin-main">
+    <div class="dashboard">
   <div class="dashboard-header">
     <div>
       <h1>Manage Books</h1>
       <p class="subtitle">Add, edit, or remove books from the catalog</p>
     </div>
     <div class="header-actions">
-      <button class="secondary-btn" (click)="goToManageAdmins()">Manage Admins</button>
-      <button class="primary-btn" (click)="openAddForm()">+ Add Book</button>
+      <button class="primary-btn" (click)="openAddForm()">+ Add New Book</button>
     </div>
   </div>
 
-  @if (showForm) {
+  @if (showForm()) {
     <div class="form-panel">
-      <h2>{{ editingId !== null ? 'Edit Book' : 'Add New Book' }}</h2>
+      <h2>{{ editingId() !== null ? 'Edit Book' : 'Add New Book' }}</h2>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-row">
           <div class="field">
             <label>Title</label>
-            <input formControlName="title" placeholder="Book title" />
+            <input formControlName="title" maxlength="255" placeholder="Book title" />
+            @if (form.get('title')?.invalid && form.get('title')?.touched) {
+              <span class="error">Title is required and cannot exceed 255 characters.</span>
+            }
           </div>
           <div class="field">
             <label>Author</label>
-            <input formControlName="author" placeholder="Author name" />
+            <input formControlName="author" maxlength="255" placeholder="Author name" />
+            @if (form.get('author')?.invalid && form.get('author')?.touched) {
+              <span class="error">Author is required and cannot exceed 255 characters.</span>
+            }
           </div>
         </div>
         <div class="form-row">
           <div class="field">
             <label>Category</label>
-            <input formControlName="category" placeholder="e.g. Fiction" />
+            <input formControlName="category" maxlength="255" placeholder="e.g. Fiction" />
+            @if (form.get('category')?.invalid && form.get('category')?.touched) {
+              <span class="error">Category is required and cannot exceed 255 characters.</span>
+            }
           </div>
           <div class="field">
-            <label>Price ($)</label>
-            <input type="number" step="0.01" formControlName="price" />
+            <label>Price (EGP)</label>
+            <input type="number" min="0.01" step="0.01" formControlName="price" />
+            @if (form.get('price')?.invalid && form.get('price')?.touched) {
+              <span class="error">Price must be greater than zero.</span>
+            }
           </div>
         </div>
         <div class="field">
           <label>Image URL</label>
-          <input formControlName="imageUrl" placeholder="https://..." />
+          <input formControlName="imageUrl" maxlength="255" placeholder="https://..." />
+          @if (form.get('imageUrl')?.invalid && form.get('imageUrl')?.touched) {
+            <span class="error">Image URL is required and cannot exceed 255 characters.</span>
+          }
         </div>
         <div class="field">
           <label>Description</label>
-          <textarea formControlName="description" rows="3" placeholder="Short description"></textarea>
+          <textarea formControlName="description" rows="3" maxlength="1000" placeholder="Short description"></textarea>
+          @if (form.get('description')?.invalid && form.get('description')?.touched) {
+            <span class="error">Description is required and cannot exceed 1000 characters.</span>
+          }
         </div>
         <div class="form-actions">
           <button type="button" class="secondary-btn" (click)="cancelForm()">Cancel</button>
-          <button type="submit" class="primary-btn">{{ editingId !== null ? 'Save Changes' : 'Add Book' }}</button>
+          <button type="submit" class="primary-btn">{{ editingId() !== null ? 'Save Changes' : 'Add Book' }}</button>
         </div>
       </form>
     </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
   }
 
   <div class="table-wrapper">
     <table class="book-table">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Cover</th>
           <th>Title</th>
           <th>Author</th>
@@ -65,13 +88,14 @@
         </tr>
       </thead>
       <tbody>
-        @for (book of books; track book.id) {
+        @for (book of books(); track book.id) {
           <tr>
+            <td>{{ book.id }}</td>
             <td><img [src]="book.imageUrl" class="cover-thumb" alt="" /></td>
             <td>{{ book.title }}</td>
             <td>{{ book.author }}</td>
             <td>{{ book.category }}</td>
-            <td>${{ book.price.toFixed(2) }}</td>
+            <td>{{ book.price.toFixed(2) }} EGP</td>
             <td class="actions-cell">
               <button class="icon-btn" (click)="openEditForm(book)">Edit</button>
               <button class="icon-btn danger" (click)="deleteBook(book)">Delete</button>
@@ -80,10 +104,12 @@
         }
         @empty {
           <tr>
-            <td colspan="6" class="empty-row">No books yet — add your first one.</td>
+            <td colspan="7" class="empty-row">No books yet — add your first one.</td>
           </tr>
         }
       </tbody>
     </table>
   </div>
+    </div>
+  </main>
 </div>

@@ -16,18 +16,19 @@
 
     <div class="field">
       <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" placeholder="At least 8 characters" />
+      <input id="password" type="password" formControlName="password" maxlength="50" placeholder="8 to 50 characters" />
       @if (form.get('password')?.invalid && form.get('password')?.touched) {
         <span class="error">
           @if (form.get('password')?.errors?.['required']) { Password is required. }
           @if (form.get('password')?.errors?.['minlength']) { Password must be at least 8 characters. }
+          @if (form.get('password')?.errors?.['maxlength']) { Password cannot exceed 50 characters. }
         </span>
       }
     </div>
 
     <div class="field">
       <label for="confirmPassword">Confirm Password</label>
-      <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Re-enter password" />
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" maxlength="50" placeholder="Re-enter password" />
       @if (form.get('confirmPassword')?.touched && form.errors?.['passwordsMismatch']) {
         <span class="error">Passwords do not match.</span>
       }
@@ -44,8 +45,8 @@
       }
     </div>
     
-     @if (errorMessage) {
-      <div class="form-error">{{ errorMessage }}</div>
+     @if (errorMessage()) {
+      <div class="form-error">{{ errorMessage() }}</div>
     }
 
     <button type="submit">Sign Up</button>

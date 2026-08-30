@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../core/auth';
 import {
@@ -24,7 +24,7 @@ function passwordsMatchValidator(group: AbstractControl): ValidationErrors | nul
 })
 export class Signup {
   form: FormGroup;
-  errorMessage = '';
+  errorMessage = signal('');
 
   constructor(
     private fb: FormBuilder,
@@ -34,16 +34,16 @@ export class Signup {
     this.form = this.fb.group(
       {
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(8)]],
-        confirmPassword: ['', [Validators.required]],
-        phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{8,15}$/)]],
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+        phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{10,15}$/)]],
       },
       { validators: passwordsMatchValidator }
     );
   }
 
   onSubmit(): void {
-    this.errorMessage = '';
+    this.errorMessage.set('');
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -57,7 +57,7 @@ export class Signup {
         this.router.navigate(['/login']);
       },
       error: () => {
-        this.errorMessage = 'Registration failed. Please try again.';
+        this.errorMessage.set('Registration failed. Please try again.');
       },
     });
   }

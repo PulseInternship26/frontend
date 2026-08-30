@@ -1,0 +1,117 @@
+:host {
+  display: block;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 28px 20px;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+}
+
+header {
+  padding: 0 8px 28px;
+}
+
+.brand {
+  color: var(--color-primary);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+header p {
+  margin: 6px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+nav {
+  display: grid;
+  gap: 8px;
+}
+
+nav a {
+  padding: 11px 12px;
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+nav a:hover,
+nav a.active {
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+}
+
+footer {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+  padding: 24px 8px 0;
+}
+
+.username {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+button {
+  padding: 9px 12px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.theme-button {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+}
+
+.logout-button {
+  border: 0;
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.logout-button:hover {
+  background: var(--color-accent-hover);
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    position: static;
+    min-height: auto;
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  header {
+    padding: 0 0 14px;
+  }
+
+  nav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  footer {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    margin-top: 14px;
+    padding: 0;
+  }
+}

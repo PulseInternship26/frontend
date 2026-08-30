@@ -4,6 +4,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book, BookService } from '../../core/book.service';
 import { Navbar } from '../../shared/navbar/navbar';
+import { Auth } from '../../core/auth';
 
 @Component({
   selector: 'app-book-details',
@@ -15,11 +16,12 @@ export class BookDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly bookService = inject(BookService);
+  private readonly authService = inject(Auth);
 
   book = signal<Book | null>(null);
   isLoading = signal(true);
   errorMessage = signal('');
-  username = localStorage.getItem('email') || 'User';
+  username = this.authService.getEmail() || 'User';
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -51,7 +53,7 @@ export class BookDetails implements OnInit {
   }
 
   onLogout(): void {
-    localStorage.clear();
+    this.authService.clearSession();
     this.router.navigate(['/login']);
   }
 }

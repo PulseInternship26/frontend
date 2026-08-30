@@ -3,9 +3,10 @@
 <div class="hero">
   <h1>Find your next great read</h1>
   <p>Browse our collection of books across every genre</p>
+  <a class="explore-btn" href="#books">Explore Books</a>
 </div>
 
-<div class="book-grid">
+<div id="books" class="book-grid">
   @for (book of books(); track book.id) {
     <app-book-card
       [id]="book.id"

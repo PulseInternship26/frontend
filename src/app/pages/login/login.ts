@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../core/auth';
@@ -11,7 +11,7 @@ import { Auth } from '../../core/auth';
 })
 export class Login {
   form: FormGroup;
-  errorMessage = '';
+  errorMessage = signal('');
 
   constructor(
     private fb: FormBuilder,
@@ -25,7 +25,7 @@ export class Login {
   }
 
   onSubmit(): void {
-    this.errorMessage = '';
+    this.errorMessage.set('');
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -45,7 +45,7 @@ export class Login {
         }
       },
       error: () => {
-        this.errorMessage = 'Invalid email or password.';
+        this.errorMessage.set('Invalid email or password.');
       },
     });
   }

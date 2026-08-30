@@ -22,7 +22,7 @@ export class CustomerHome implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.username = localStorage.getItem('email') || 'User';
+    this.username = this.authService.getEmail() || 'User';
 
     this.booksService.getBooks().subscribe({
       next: (data) => this.books.set(data),
@@ -33,7 +33,7 @@ export class CustomerHome implements OnInit {
   }
 
   onLogout(): void {
-    localStorage.clear();
+    this.authService.clearSession();
     this.router.navigate(['/login']);
   }
 

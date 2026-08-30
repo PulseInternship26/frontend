@@ -1,3 +1,13 @@
+.admin-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.admin-main {
+  min-width: 0;
+}
+
 .dashboard {
   max-width: 1100px;
   margin: 0 auto;
@@ -119,12 +129,13 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 14px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: var(--shadow-card);
 }
 
 .book-table {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
 }
 
@@ -194,7 +205,7 @@
   padding: 10px 12px;
   border-radius: 8px;
   font-size: 13px;
-  margin-top: 12px;
+  margin: 0 0 24px;
 }
 
 .inline-form {
@@ -206,4 +217,19 @@
 .inline-form .field {
   flex: 1;
   margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard {
+    padding: 24px 16px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
 }

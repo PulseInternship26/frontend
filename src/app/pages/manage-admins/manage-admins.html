@@ -1,68 +1,85 @@
-<app-navbar [username]="username" (logout)="onLogout()" />
-
-<div class="dashboard">
+<div class="admin-layout">
+  <app-admin-sidebar [username]="username" (logout)="onLogout()" />
+  <main class="admin-main">
+    <div class="dashboard">
   <div class="dashboard-header">
     <div>
       <h1>Manage Admins</h1>
       <p class="subtitle">Grant or revoke admin access</p>
     </div>
-    <button class="secondary-btn" (click)="goToBooks()">Back to Books</button>
+    <div class="header-actions">
+      <button class="primary-btn" (click)="openAddForm()">+ Add New Admin</button>
+    </div>
   </div>
 
-  <div class="form-panel">
-    <h2>Add New Admin</h2>
-    <form [formGroup]="form" (ngSubmit)="onAddAdmin()" class="inline-form">
-      <div class="field">
-        <label>Email</label>
-        <input formControlName="email" placeholder="newadmin@example.com" />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-          <span class="error">Enter a valid email address.</span>
-        }
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input type="password" formControlName="password" placeholder="At least 8 characters" />
-        @if (form.get('password')?.invalid && form.get('password')?.touched) {
-          <span class="error">Password must be at least 8 characters.</span>
-        }
-      </div>
-      <div class="field">
-        <label>Phone</label>
-        <input formControlName="phone" placeholder="+201001234567" />
-        @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
-          <span class="error">Enter a valid phone number.</span>
-        }
-      </div>
-      <button type="submit" class="primary-btn">Add Admin</button>
-    </form>
-    @if (errorMessage) {
-      <div class="form-error">{{ errorMessage }}</div>
-    }
-  </div>
+  @if (showAddForm()) {
+    <div class="form-panel">
+      <h2>Add New Admin</h2>
+      <form [formGroup]="form" (ngSubmit)="onAddAdmin()" class="inline-form">
+        <div class="field">
+          <label>Email</label>
+          <input formControlName="email" placeholder="newadmin@example.com" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <span class="error">Enter a valid email address.</span>
+          }
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" formControlName="password" maxlength="50" placeholder="8 to 50 characters" />
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <span class="error">
+              @if (form.get('password')?.errors?.['required']) { Password is required. }
+              @if (form.get('password')?.errors?.['minlength']) { Password must be at least 8 characters. }
+              @if (form.get('password')?.errors?.['maxlength']) { Password cannot exceed 50 characters. }
+            </span>
+          }
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input formControlName="phone" placeholder="+201001234567" />
+          @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+            <span class="error">Enter a valid phone number.</span>
+          }
+        </div>
+        <button type="button" class="secondary-btn" (click)="cancelAddForm()">Cancel</button>
+        <button type="submit" class="primary-btn">Add Admin</button>
+      </form>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
+  }
 
   <div class="table-wrapper">
     <table class="book-table">
       <thead>
         <tr>
+          <th>ID</th>
           <th>Email</th>
           <th>Phone</th>
+          <th>Role</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        @for (admin of admins; track admin.id) {
+        @for (admin of admins(); track admin.id) {
           <tr>
+            <td>{{ admin.id }}</td>
             <td>{{ admin.email }}</td>
             <td>{{ admin.phone }}</td>
+            <td>{{ admin.role }}</td>
             <td class="actions-cell">
-              <button class="icon-btn danger" (click)="removeAdmin(admin)">Remove</button>
+              <button class="icon-btn danger" (click)="removeAdmin(admin)">Delete</button>
             </td>
           </tr>
         }
         @empty {
-          <tr><td colspan="3" class="empty-row">No admins yet.</td></tr>
+          <tr><td colspan="5" class="empty-row">No admins yet.</td></tr>
         }
       </tbody>
     </table>
   </div>
+    </div>
+  </main>
 </div>
